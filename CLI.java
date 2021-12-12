@@ -14,8 +14,10 @@ public class CLI {
 	*/
 	public static void main(String[] args) {
 		ArrayList<String> data = readFile(args[0]);
-		ArrayList<HashMap<String, String>> records = parseData(data);
-		printData(records);
+		if (data != null) {
+			ArrayList<HashMap<String, String>> records = parseData(data);
+			printData(records);
+		}
 	}
 	
 	
@@ -43,7 +45,13 @@ public class CLI {
 				
 				switch(c) {
 				case ',':
-					map.get(i).put(keys.get(k), word);
+					if (k < keys.size()) {
+						map.get(i).put(keys.get(k), word);
+					}
+					else {
+						System.out.println("ERROR: Input \"" + word + "\" ignored, out of range at: line " + 
+								(i + 2) + ", index " + k);
+					}
 					word = "";
 					k++;
 					break;
@@ -54,7 +62,13 @@ public class CLI {
 				}	
 			}
 			
-			map.get(i).put(keys.get(k), word);
+			if (k < keys.size()) {
+				map.get(i).put(keys.get(k), word);
+			}
+			else {
+				System.out.println("ERROR: Input \"" + word + "\" ignored, out of range at: line " + 
+						(i + 2) + ", index " + k);
+			}
 			word = "";
 		}
 		
