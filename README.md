@@ -1,7 +1,7 @@
 # CLI
 Accepts a CSV file and outputs the contents in YAML format to the console
 
-Usage: java CSI.java <CSV filepath>
+Usage: java CSI.java "<CSV filepath>"
 
 Some possible additional error checks
 - Check file is a CSV file
