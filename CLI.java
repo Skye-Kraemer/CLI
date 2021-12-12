@@ -14,15 +14,23 @@ public class CLI {
 	*/
 	public static void main(String[] args) {
 		ArrayList<String> data = readFile(args[0]);
-		parseData(data);
+		ArrayList<HashMap<String, String>> records = parseData(data);
+		printData(records);
 	}
 	
 	
 	/*
 	 * Prints data in YAML format
 	 */
-	public static void printData() {
+	public static void printData(ArrayList<HashMap<String, String>> records) {
 		
+		System.out.println("records:");
+		for (int i = 0; i < records.size(); i++) {
+			HashMap<String, String> person = records.get(i);
+			System.out.println(" -name: " + person.get("firstname") + " " + person.get("lastname"));
+			System.out.println("details: In division " + person.get("division") + " from " + person.get("date") + 
+					" performing " + person.get("summary"));
+		}
 	}
 	
 	
@@ -30,6 +38,7 @@ public class CLI {
 	 * Separates the data in a comma separated string into a hashmap and returns the hashmap
 	 */
 	public static ArrayList<HashMap<String, String>> parseData(ArrayList<String> data) {
+		String word = "";
 		char c;
 		
 		ArrayList<String> keys = new ArrayList<String>();
@@ -47,22 +56,37 @@ public class CLI {
 		}
 		keys.add(word);
 		word = "";
-		printArray(keys);
 		
+		ArrayList<HashMap<String, String>> map = new ArrayList<HashMap<String, String>>();
+		int k;
 		for (int i = 1; i < data.size(); i++) {
-			c =  data.get(i).charAt(i);
+			map.add(new HashMap<String, String>());
+			k = 0;
+			
+			for (int j = 0; j < data.get(i).length(); j++) {
+				c = data.get(i).charAt(j);
+				
+				switch(c) {
+				case ',':
+					map.get(i - 1).put(keys.get(k), word);
+					word = "";
+					k++;
+					break;
+				case '"':
+					break;
+				default:
+					word = word + c;
+				}	
+			}
+			
+			map.get(i - 1).put(keys.get(k), word);
+			word = "";
 			
 		}
 		
-		return null;
+		return map;
 	}
 	
-	//testing function
-	public static void printArray(ArrayList<String> array) {
-		for (int i = 0; i < array.size(); i++) {
-			System.out.print(array.get(i) + ", ");
-		}
-	}
 	
 	/*
 	 * Reads given file and returns data as an array of Strings
@@ -88,5 +112,6 @@ public class CLI {
 			System.out.println("ERROR: Failed to read: " + filename);
 			return null;
 		}
+		
 	}
 }
