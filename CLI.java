@@ -1,9 +1,12 @@
 package CLI;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class test {
+public class CLI {
 	
 	
 	/*
@@ -31,9 +34,29 @@ public class test {
 	
 	
 	/*
-	 * Reads given file and returns data as an array of Strings
+	 * Reads given file and returns data as a string
 	 */
 	public static String readFile(String filename) {
-		return null;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			try {
+				StringBuilder stringBuilder = new StringBuilder();
+				String line = reader.readLine();
+
+				while (line != null) {
+					stringBuilder.append(line);
+					stringBuilder.append("\n");
+					line = reader.readLine();
+				}
+				return stringBuilder.toString();
+			} 
+			finally {
+				reader.close();
+			}
+		}
+		catch (IOException e) {
+			System.out.println("ERROR: Failed to read: " + filename);
+			return null;
+		}	
 	}
 }
