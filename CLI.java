@@ -16,8 +16,43 @@ public class CLI {
 		ArrayList<String> data = readFile(args[0]);
 		if (data != null) {
 			ArrayList<HashMap<String, String>> records = parseData(data);
-			printData(records);
+			printData(sortData(records));
 		}
+	}
+
+	
+	/*
+	* Returns the 3 hashmaps with the lowest division and points in order
+	*/
+	private static ArrayList<HashMap<String, String>> sortData(ArrayList<HashMap<String, String>> map) {
+		
+		ArrayList<HashMap<String, String>> sortedMap = new ArrayList<HashMap<String, String>>();
+		
+		int selectionNumber = 3;
+		int div, points, lowestDiv, lowestPoints;
+		HashMap<String, String> lowest = map.get(0);
+		
+		
+		for (int i = 0; i < selectionNumber; i++) {
+			lowestDiv = Integer.parseInt(map.get(0).get("division"));
+			lowestPoints = Integer.parseInt(map.get(0).get("points"));
+			
+			for (int j = 0; j < map.size(); j++) {
+				div = Integer.parseInt(map.get(j).get("division"));
+				points = Integer.parseInt(map.get(j).get("points"));
+				
+				if (div < lowestDiv || (div == lowestDiv && points <= lowestPoints)) {
+					lowest = map.get(j);
+					lowestDiv = div;
+					lowestPoints = points;
+					
+				}
+			}
+			sortedMap.add(lowest);
+			map.remove(lowest);
+		}
+		
+		return sortedMap;
 	}
 	
 	
